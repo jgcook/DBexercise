@@ -50,7 +50,7 @@ class WeightedPortfolioBacktester:
 
     def _get_pnls(self, daily_weights):
         '''
-        Calculate PnL for each asset based on portfolio weights, then sum up to work out the total.
+        Calculate PnL for each asset based on portfolio weights, then sum them up to work out the total PnL.
         
         param daily_weights: pandas.DataFrame - dataframe containing daily portfolio weights
         returns: pandas.DataFrame containing PnLs for each asset

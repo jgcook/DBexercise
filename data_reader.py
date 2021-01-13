@@ -47,6 +47,7 @@ class ExampleCSVDataset(DatasetReader):
     Subclass for reading data formatted as in example CSV dataset.
     '''
     
+    # date column index 
     _date_column = 0
     
     def _read(self, filepath):

@@ -72,7 +72,7 @@ class WeightedPortfolioGenerator(abc.ABC):
         param signal_df: pandas.DataFrame - dataframe containing signal data
         returns: pandas.DataFrame containing asset rankings for each date
         '''
-        # get signal at the start of each month
+        # we only need the signal at the start of each month
         monthly_signal = signal_df.resample(self._rebalance_period).first() 
         rank_df = monthly_signal.rank(axis=1, ascending=False, method='first') # have to use method=first to avoid non-integer ranks
         return rank_df        
@@ -84,7 +84,8 @@ class WeightedPortfolioGenerator(abc.ABC):
         param rank_df: pandas.DataFrame - dataframe containing asset rankings 
         returns: pandas.DataFrame with long positions assigned +1, short positions assigned -1
         '''
-        cutoff = rank_df.shape[1] * self._longshort_split
+        # rank cutoff is number of assets * split ratio
+        cutoff = rank_df.shape[1] * self._longshort_split 
         # Determine which positions are ranked below cutoff
         longshort_portfolios = pd.DataFrame(np.where(rank_df <= cutoff, 1, -1), 
                                             index=rank_df.index, 
@@ -103,6 +104,10 @@ class WeightedPortfolioGenerator(abc.ABC):
         pass
 
 class EqualWeightedPortfolioGenerator(WeightedPortfolioGenerator):
+    '''
+    Assigns identical weight to all assets in each leg.
+    '''
+
     @staticmethod
     def _assign_weights(longshort):
         '''
